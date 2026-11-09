@@ -34,13 +34,13 @@ SECRET_KEY = 'django-insecure-2xl48^%5syfto0!f)8sp)jfn=+en-jz0j&36snrn_@!-1ljcka
 
 # SECURITY WARNING: don't run with debug turned on in production!
 # Безопасность для продакшена
-DEBUG = os.environ.get('DJANGO_DEBUG', 'False') == 'True'
+DEBUG = False
 
 SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'x8kL2mP9qR5vN3wT7yU1')
 
-ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', '127.0.0.1,localhost').split(',')
+ALLOWED_HOSTS = ['sakh-platform.onrender.com', '.onrender.com', '127.0.0.1', 'localhost']
 
-
+CSRF_TRUSTED_ORIGINS = ['https://sakh-platform.onrender.com', 'https://*.onrender.com']
 # Application definition
 
 INSTALLED_APPS = [
@@ -166,3 +166,6 @@ STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 if whitenoise:
     STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+LOGIN_REDIRECT_URL = '/dashboard/'  # Или '/', если дашборд на главной
+LOGOUT_REDIRECT_URL = '/login/'
