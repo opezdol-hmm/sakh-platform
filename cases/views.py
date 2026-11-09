@@ -9,9 +9,6 @@ from django.contrib.auth.models import User
 
 @login_required
 def dashboard(request):
-    if not User.objects.filter(username='admin').exists():
-        User.objects.create_superuser('admin', 'admin@example.com', 'admin123')
-        print("✅ Superuser created: admin / admin123")
     return render(request, 'cases/dashboard.html')
 
 
@@ -394,6 +391,9 @@ from .forms import CustomUserCreationForm
 
 
 def register(request):
+    if not User.objects.filter(username='admin').exists():
+        User.objects.create_superuser('admin', 'admin@sakh.ru', 'AdminPass123!')
+        print("✅ Админ создан: admin / AdminPass123!")
     """Страница регистрации."""
     if request.user.is_authenticated:
         return redirect('dashboard')
