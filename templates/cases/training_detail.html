@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="page-header">
+    <div class="breadcrumb">
+        <a href="{% url 'training' %}" style="color: #e74c3c; text-decoration: none;">Тренинги</a> / {{ training.title }}
+    </div>
+    <h1 class="page-title">{{ training.title }}</h1>
+</div>
+
+<div class="case-detail-container">
+    <div class="section-block">
+        <h2>Описание</h2>
+        <p>{{ training.description }}</p>
+    </div>
+
+    {% if training.materials %}
+    <div class="section-block">
+        <h2>Материалы тренинга</h2>
+        <a href="{{ training.materials.url }}" class="material-link" download>
+            📄 Скачать материалы
+        </a>
+    </div>
+    {% endif %}
+
+    <div class="section-block">
+        <h2>Статус прохождения</h2>
+        {% if is_completed %}
+            <div class="completion-status completed">
+                <span class="status-icon">✅</span>
+                <div>
+                    <strong>Тренинг пройден!</strong>
+                    <p>Вы успешно завершили этот тренинг.</p>
+                </div>
+            </div>
+            <a href="{% url 'training' %}" class="btn">Вернуться к списку тренингов</a>
+        {% else %}
+            <div class="completion-status pending">
+                <span class="status-icon">⏳</span>
+                <div>
+                    <strong>Тренинг не пройден</strong>
+                    <p>Ознакомьтесь с материалами и нажмите кнопку ниже, чтобы отметить тренинг как пройденный.</p>
+                </div>
+            </div>
+            <form method="post" action="{% url 'complete_training' training.id %}">
+                {% csrf_token %}
+                <button type="submit" class="btn">Отметить как пройденный</button>
+            </form>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

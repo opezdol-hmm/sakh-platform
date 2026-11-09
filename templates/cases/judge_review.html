@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="page-header">
+    <div class="breadcrumb">
+        <a href="{% url 'case_list' %}" style="color: #e74c3c; text-decoration: none;">Кейсы</a> /
+        <a href="{% url 'case_detail' submission.case.id %}" style="color: #e74c3c; text-decoration: none;">{{ submission.case.title }}</a> / Проверка
+    </div>
+    <h1 class="page-title">Проверка решения команды "{{ submission.team.name }}"</h1>
+</div>
+
+<div class="case-detail-container">
+    <div class="section-block">
+        <h2>Файл решения команды</h2>
+        <a href="{{ submission.file.url }}" class="material-link" download target="_blank">
+            📥 Скачать решение команды
+        </a>
+    </div>
+
+    <div class="section-block">
+        <h2>Оценка жюри (шкала 0-10)</h2>
+        <form method="post" class="upload-form">
+            {% csrf_token %}
+
+            <div class="form-group">
+                <label>Технологичность (0-10):</label>
+                <input type="number" name="score_technology" min="0" max="10" value="{{ review.score_technology|default:0 }}" required style="width: 100px; padding: 8px;">
+            </div>
+
+            <div class="form-group">
+                <label>Экономика (0-10):</label>
+                <input type="number" name="score_economics" min="0" max="10" value="{{ review.score_economics|default:0 }}" required style="width: 100px; padding: 8px;">
+            </div>
+
+            <div class="form-group">
+                <label>Экология (0-10):</label>
+                <input type="number" name="score_ecology" min="0" max="10" value="{{ review.score_ecology|default:0 }}" required style="width: 100px; padding: 8px;">
+            </div>
+
+            <div class="form-group">
+                <label>Реализуемость (0-10):</label>
+                <input type="number" name="score_realizability" min="0" max="10" value="{{ review.score_realizability|default:0 }}" required style="width: 100px; padding: 8px;">
+            </div>
+
+            <div class="form-group">
+                <label>Комментарий жюри:</label>
+                <textarea name="comment" rows="4" style="width: 100%; padding: 10px; border: 1px solid #e2e8f0; border-radius: 8px;" required>{{ review.comment|default:"" }}</textarea>
+            </div>
+
+            <button type="submit" class="btn">Сохранить оценку</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

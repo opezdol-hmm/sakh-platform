@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="page-header">
+    <h1 class="page-title">Уведомления</h1>
+</div>
+
+<div class="notifications-container">
+    {% for notification in notifications %}
+    <div class="notification-item {% if notification.unread %}unread{% endif %}">
+        <div class="notification-text">{{ notification.text }}</div>
+        <div class="notification-time">{{ notification.time }}</div>
+        {% if notification.unread %}
+        <a href="?mark_read={{ notification.id }}" class="mark-read-btn">Отметить как прочитанное</a>
+        {% endif %}
+    </div>
+    {% empty %}
+    <div class="section-block">
+        <p>У вас нет уведомлений.</p>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

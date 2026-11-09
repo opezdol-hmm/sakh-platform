@@ -1,0 +1,132 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="page-header">
+    <div class="breadcrumb">
+        <a href="{% url 'case_list' %}" style="color: #e74c3c; text-decoration: none;">Кейсы</a> / {{ case.title }}
+    </div>
+    <h1 class="page-title">{{ case.title }}</h1>
+</div>
+
+<div class="case-detail-container">
+    <div class="section-block">
+        <h2>Описание</h2>
+        <p>{{ case.description }}</p>
+    </div>
+
+    <div class="section-block">
+        <h2>Материалы кейса</h2>
+        {% if case.materials %}
+            <a href="{{ case.materials.url }}" class="material-link" download>📄 Скачать материалы</a>
+        {% else %}
+            <p>Материалы не прикреплены.</p>
+        {% endif %}
+    </div>
+
+    {% if team %}
+    <div class="section-block">
+        <h2>Решение команды "{{ team.name }}"</h2>
+
+        {% if submission %}
+            {% if submission.status == 'pending' %}
+                <span class="status-badge status-pending">⏳ На проверке</span>
+                <p>Ваше решение загружено и ожидает проверки жюри.</p>
+            {% elif submission.status == 'reviewed' %}
+                <span class="status-badge status-reviewed">✅ Проверено</span>
+
+                {% if review %}
+                <div class="review-results">
+                    <h3>Результаты оценки</h3>
+                    <div class="scores-grid">
+                        <div class="score-item">
+                            <div class="score-label">Технологичность</div>
+                            <div class="score-value">{{ review.score_technology }}/10</div>
+                        </div>
+                        <div class="score-item">
+                            <div class="score-label">Экономика</div>
+                            <div class="score-value">{{ review.score_economics }}/10</div>
+                        </div>
+                        <div class="score-item">
+                            <div class="score-label">Экология</div>
+                            <div class="score-value">{{ review.score_ecology }}/10</div>
+                        </div>
+                        <div class="score-item">
+                            <div class="score-label">Реализуемость</div>
+                            <div class="score-value">{{ review.score_realizability }}/10</div>
+                        </div>
+                    </div>
+                    <div class="total-score">
+                        <strong>Итого:</strong> {{ review.score_technology|add:review.score_economics|add:review.score_ecology|add:review.score_realizability }}/40
+                    </div>
+
+                    <div class="comment-block">
+                        <h4>💬 Комментарий жюри:</h4>
+                        <p>{{ review.comment }}</p>
+                    </div>
+
+                    <div class="chart-container">
+                        <canvas id="reviewChart"></canvas>
+                    </div>
+                </div>
+                {% endif %}
+            {% endif %}
+        {% else %}
+            <p>Решение еще не загружено.</p>
+        {% endif %}
+    </div>
+
+    {% if is_captain and not submission %}
+    <div class="section-block">
+        <h2>Загрузить решение</h2>
+        <form method="post" action="{% url 'submit_solution' case.id %}" enctype="multipart/form-data" class="upload-form">
+            {% csrf_token %}
+            <div class="form-group">
+                <label>Выберите файл:</label>
+                <input type="file" name="solution_file" required>
+            </div>
+            <button type="submit" class="btn">Загрузить решение</button>
+        </form>
+    </div>
+    {% endif %}
+    {% else %}
+    <div class="section-block">
+        <p style="color: #e74c3c;">⚠️ Вы не состоите в команде.</p>
+    </div>
+    {% endif %}
+</div>
+
+{% if review_json %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    const reviewData = {{ review_json|safe }};
+    const ctx = document.getElementById('reviewChart').getContext('2d');
+    new Chart(ctx, {
+        type: 'radar',
+        data: {
+            labels: reviewData.labels,
+            datasets: [{
+                label: 'Оценки жюри',
+                data: reviewData.data,
+                backgroundColor: 'rgba(231, 76, 60, 0.2)',
+                borderColor: '#e74c3c',
+                borderWidth: 2,
+                pointBackgroundColor: '#e74c3c',
+                pointRadius: 5
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                r: {
+                    beginAtZero: true,
+                    max: 10,
+                    ticks: { stepSize: 2 }
+                }
+            },
+            plugins: {
+                legend: { display: false }
+            }
+        }
+    });
+</script>
+{% endif %}
+{% endblock %}

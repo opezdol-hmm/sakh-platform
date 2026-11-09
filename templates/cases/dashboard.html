@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="page-header">
+    <h1 class="page-title">Личный кабинет участника</h1>
+</div>
+
+<div class="dashboard-cards">
+    <a href="{% url 'profile' %}" class="dash-card dash-card--profile">
+        <div class="dash-card__title">МОЙ<br>ПРОФИЛЬ</div>
+        <div class="dash-card__arrow">≫</div>
+    </a>
+
+    <a href="{% url 'achievements' %}" class="dash-card dash-card--achievements">
+        <div class="dash-card__title">МОИ<br>ДОСТИЖЕНИЯ</div>
+        <div class="dash-card__arrow">≫</div>
+    </a>
+</div>
+{% endblock %}

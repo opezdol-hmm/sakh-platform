@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="page-header">
+    <h1 class="page-title">Расписание</h1>
+</div>
+
+<div class="schedule-container">
+    <!-- Ближайшие события -->
+    <div class="section-block">
+        <h2 style="margin-bottom: 20px; color: #1a202c;"> Ближайшие события</h2>
+
+        {% if upcoming_events %}
+            <div class="schedule-timeline">
+                {% for event in upcoming_events %}
+                <div class="schedule-item {% if forloop.first %}schedule-item--today{% endif %}">
+                    <div class="schedule-date">
+                        <div class="date-day">{{ event.date|date:"d" }}</div>
+                        <div class="date-month">{{ event.date|date:"M" }}</div>
+                    </div>
+                    <div class="schedule-content">
+                        <div class="schedule-header">
+                            <span class="schedule-icon">{{ event.icon }}</span>
+                            <h3 class="schedule-title">{{ event.title }}</h3>
+                            <span class="schedule-type">{{ event.type }}</span>
+                        </div>
+                        <div class="schedule-details">
+                            <span class="schedule-time">🕐 {{ event.time }}</span>
+                            {% if event.location %}
+                                <span class="schedule-location">
+                                    {% if event.is_online %}🌐{% else %}📍{% endif %}
+                                    {{ event.location }}
+                                </span>
+                            {% endif %}
+                            {% if event.case %}
+                                <a href="{% url 'case_detail' event.case.id %}" class="schedule-case-link">
+                                    🔗 Кейс: {{ event.case.title }}
+                                </a>
+                            {% endif %}
+                        </div>
+                        {% if event.description %}
+                            <p class="schedule-description">{{ event.description }}</p>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div style="text-align: center; padding: 40px; color: #718096;">
+                <p>Пока нет запланированных событий</p>
+            </div>
+        {% endif %}
+    </div>
+
+    <!-- Прошедшие события -->
+    {% if past_events %}
+    <div class="section-block">
+        <h2 style="margin-bottom: 20px; color: #718096;">📚 Прошедшие события</h2>
+        <div class="schedule-timeline schedule-timeline--past">
+            {% for event in past_events %}
+            <div class="schedule-item schedule-item--past">
+                <div class="schedule-date">
+                    <div class="date-day">{{ event.date|date:"d" }}</div>
+                    <div class="date-month">{{ event.date|date:"M" }}</div>
+                </div>
+                <div class="schedule-content">
+                    <div class="schedule-header">
+                        <span class="schedule-icon">{{ event.icon }}</span>
+                        <h3 class="schedule-title">{{ event.title }}</h3>
+                        <span class="schedule-type">{{ event.type }}</span>
+                    </div>
+                    <div class="schedule-details">
+                        <span class="schedule-time">🕐 {{ event.time }}</span>
+                        {% if event.location %}
+                            <span class="schedule-location">
+                                {% if event.is_online %}🌐{% else %}{% endif %}
+                                {{ event.location }}
+                            </span>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

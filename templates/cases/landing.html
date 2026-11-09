@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ИОС Сахалинэнерго — Платформа кейс-чемпионатов</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}?v=4">
+</head>
+<body class="landing-body">
+    <header class="landing-header">
+        <div class="container header-content">
+            <div class="logo">⚡ ИОС Сахалинэнерго</div>
+            <div class="auth-buttons">
+                <a href="{% url 'login' %}" class="btn btn-outline-light">Войти</a>
+                <a href="{% url 'register' %}" class="btn btn-primary">Регистрация</a>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <!-- Hero секция -->
+        <section class="hero">
+            <div class="container hero-content">
+                <h1>Развивай навыки через реальные кейсы</h1>
+                <p>Образовательная платформа для участия в кейс-чемпионатах, прохождения тренингов и оценки решений экспертами.</p>
+                <div class="hero-actions">
+                    <a href="{% url 'register' %}" class="btn btn-primary btn-lg">Начать обучение</a>
+                    <a href="#features" class="btn btn-outline-light btn-lg">Узнать больше</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Преимущества -->
+        <section id="features" class="features">
+            <div class="container">
+                <h2 class="section-title">Возможности платформы</h2>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">💡</div>
+                        <h3>Реальные кейсы</h3>
+                        <p>Решай актуальные задачи от ведущих специалистов энергетической отрасли.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🎓</div>
+                        <h3>Обучение и тренинги</h3>
+                        <p>Проходи структурированные тренинги и отслеживай свой прогресс.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🏆</div>
+                        <h3>Честный рейтинг</h3>
+                        <p>Соревнуйся с другими командами и попадай в топ лидерборда по итогам оценки жюри.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">👥</div>
+                        <h3>Командная работа</h3>
+                        <p>Создавай команды, распределяй роли и работай над решениями вместе.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Призыв к действию -->
+        <section class="cta">
+            <div class="container">
+                <h2>Готов проверить свои силы?</h2>
+                <p>Присоединяйся к сообществу профессионалов уже сегодня.</p>
+                <a href="{% url 'register' %}" class="btn btn-primary btn-lg">Создать аккаунт</a>
+            </div>
+        </section>
+    </main>
+
+    <footer class="landing-footer">
+        <div class="container">
+            <p>© 2026 ИОС Сахалинэнерго. Все права защищены.</p>
+        </div>
+    </footer>
+</body>
+</html>

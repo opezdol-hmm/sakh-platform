@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="page-header">
+    <h1 class="page-title">Сообщения</h1>
+</div>
+
+<div class="messages-container">
+    {% for message in messages %}
+    <div class="message-item {% if message.unread %}unread{% endif %}">
+        <div class="message-from">{{ message.from }}</div>
+        <div class="message-text">{{ message.text }}</div>
+        <div class="message-time">{{ message.time }}</div>
+    </div>
+    {% empty %}
+    <div class="section-block">
+        <p>У вас нет новых сообщений.</p>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

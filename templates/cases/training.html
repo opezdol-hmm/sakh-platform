@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="page-header">
+    <h1 class="page-title">Тренинги</h1>
+</div>
+
+<div class="training-progress-bar">
+    <div class="progress-info">
+        <span>Прогресс обучения</span>
+        <span>{{ completed_count }} из {{ total_count }} пройдено</span>
+    </div>
+    <div class="progress-track">
+        <div class="progress-fill" style="width: {{ progress_percent }}%"></div>
+    </div>
+</div>
+
+<div class="training-container">
+    <div class="training-grid">
+        {% for training in trainings %}
+        <div class="training-card {% if training.is_completed %}completed{% endif %}">
+            <div class="training-status">
+                {% if training.is_completed %}
+                    <span class="status-badge status-reviewed">✅ Пройден</span>
+                {% else %}
+                    <span class="status-badge status-pending">⏳ Не пройден</span>
+                {% endif %}
+            </div>
+            <h3 class="training-title">{{ training.title }}</h3>
+            <p class="training-desc">{{ training.desc }}</p>
+            <div class="training-duration">⏱ {{ training.duration }}</div>
+            <a href="{% url 'training_detail' training.id %}" class="btn">
+                {% if training.is_completed %}Повторить{% else %}Начать{% endif %}
+            </a>
+        </div>
+        {% empty %}
+        <div class="section-block">
+            <p>Тренинги пока не добавлены.</p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="page-header">
+    <h1 class="page-title">👥 Управление командой</h1>
+</div>
+
+{% if no_team %}
+<div class="empty-state">
+    <div class="empty-icon">👥</div>
+    <h3>У вас нет команды</h3>
+    <p>Обратитесь к администратору для создания команды.</p>
+</div>
+{% else %}
+
+<!-- Информация о команде -->
+<div class="team-info-card">
+    <h2>{{ team.name }}</h2>
+    <p class="team-captain">Капитан: {{ team.captain.username }}</p>
+</div>
+
+<!-- Сообщения -->
+{% if success_message %}
+<div class="alert alert-success">{{ success_message }}</div>
+{% endif %}
+{% if add_error %}
+<div class="alert alert-error">{{ add_error }}</div>
+{% endif %}
+
+<!-- Форма добавления -->
+<div class="section-block">
+    <h3>➕ Добавить участника</h3>
+    <form method="post" style="display:flex; gap:12px; align-items:flex-end;">
+        {% csrf_token %}
+        <div style="flex:1;">
+            <label for="username">Username пользователя</label>
+            <input type="text" id="username" name="username" placeholder="Введите username" required
+                   style="width:100%; padding:10px; border:1px solid #e2e8f0; border-radius:8px;">
+        </div>
+        <button type="submit" name="add_member" class="btn btn-primary" style="height:42px;">Добавить</button>
+    </form>
+</div>
+
+<!-- Список участников -->
+<div class="section-block">
+    <h3>📋 Состав команды ({{ members.count }})</h3>
+    {% if members %}
+    <table class="members-table">
+        <thead>
+            <tr>
+                <th>Username</th>
+                <th>Имя</th>
+                <th>Действия</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for member in members %}
+            <tr>
+                <td><strong>{{ member.username }}</strong></td>
+                <td>{{ member.first_name|default:"—" }}</td>
+                <td>
+                    <form method="post" onsubmit="return confirm('Удалить {{ member.username }} из команды?');">
+                        {% csrf_token %}
+                        <input type="hidden" name="member_id" value="{{ member.id }}">
+                        <button type="submit" name="remove_member" class="btn btn-danger btn-sm">❌ Удалить</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p style="color:#718096; text-align:center; padding:20px;">В команде пока нет участников.</p>
+    {% endif %}
+</div>
+
+{% endif %}
+{% endblock %}

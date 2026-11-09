@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="page-header">
+    <h1 class="page-title">Мои достижения</h1>
+</div>
+
+<div class="achievements-container">
+    {% if achievements %}
+        <div class="achievements-grid">
+            {% for achievement in achievements %}
+            <div class="achievement-card">
+                <div class="achievement-icon">{{ achievement.icon }}</div>
+                <div class="achievement-title">{{ achievement.title }}</div>
+                <div class="achievement-desc">{{ achievement.desc }}</div>
+            </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="section-block">
+            <p>У вас пока нет достижений. Пройдите первый кейс, чтобы получить первую ачивку!</p>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

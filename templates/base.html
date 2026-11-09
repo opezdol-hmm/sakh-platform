@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>ИОС Сахалинэнерго</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}?v=4">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="layout">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="user-menu">
+                    <div class="user-avatar" onclick="document.getElementById('userDropdown').classList.toggle('open')">
+                        {% if user.profile.avatar %}
+                            <img src="{{ user.profile.avatar.url }}" alt="">
+                        {% else %}
+                            <span>{{ user.username|first|upper }}</span>
+                        {% endif %}
+                    </div>
+                    <div class="user-dropdown" id="userDropdown">
+                        <div class="dropdown-user-info">
+                            <strong>{{ user.username }}</strong>
+                            <span>{{ user.profile.get_role_display }}</span>
+                        </div>
+                        <a href="{% url 'profile' %}">👤 Мой профиль</a>
+                        <a href="{% url 'edit_profile' %}">✏️ Редактировать</a>
+                        <a href="{% url 'achievements' %}">🏆 Достижения</a>
+                        <a href="{% url 'logout' %}" class="logout">🚪 Выйти</a>
+                    </div>
+                </div>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="{% url 'dashboard' %}" class="nav-item {% if request.path == '/dashboard/' %}active{% endif %}">🏠 Личный кабинет</a>
+                <a href="{% url 'search' %}" class="nav-item {% if request.path == '/search/' %}active{% endif %}">🔍 Поиск</a>
+                <a href="{% url 'notifications' %}" class="nav-item {% if request.path == '/notifications/' %}active{% endif %}">
+                    🔔 Уведомления
+                    {% if unread_notifications_count > 0 %}<span class="badge">{{ unread_notifications_count }}</span>{% endif %}
+                </a>
+                <div class="nav-group">
+                    <div class="nav-item {% if request.path == '/training/' or request.path == '/schedule/' %}active{% endif %}">🎓 Обучение</div>
+                    <div class="submenu">
+                        <a href="{% url 'training' %}" class="{% if request.path == '/training/' %}active{% endif %}">Тренинги</a>
+                        <a href="{% url 'schedule' %}" class="{% if request.path == '/schedule/' %}active{% endif %}">Расписание</a>
+                    </div>
+                </div>
+                <div class="nav-group">
+                    <div class="nav-item {% if request.path == '/cases/' or request.path == '/my-solutions/' %}active{% endif %}">💡 Кейсы</div>
+                    <div class="submenu">
+                        <a href="{% url 'case_list' %}">Активные кейсы</a>
+                        <a href="{% url 'my_solutions' %}">Мои решения</a>
+                        <a href="{% url 'leaderboard' %}">🏆 Рейтинг команд</a>
+                        <a href="{% url 'team_management' %}">👥 Управление командой</a>
+                    </div>
+                </div>
+                <a href="{% url 'messages' %}" class="nav-item {% if request.path == '/messages/' %}active{% endif %}">✉️ Сообщения</a>
+            </nav>
+        </aside>
+        <main class="main-content">
+            {% block content %}{% endblock %}
+        </main>
+    </div>
+</body>
+</html>

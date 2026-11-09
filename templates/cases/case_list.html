@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block content %}
+<h1 class="page-title">Активные кейсы</h1>
+<div class="case-grid">
+    {% for case in cases %}
+    <div class="case-card">
+        <h3 class="case-card__title">{{ case.title }}</h3>
+        <p class="case-card__desc">{{ case.description|truncatewords:20 }}</p>
+        <a href="{% url 'case_detail' case.id %}" class="btn">Открыть кейс</a>
+    </div>
+    {% empty %}
+    <p>Пока нет активных кейсов.</p>
+    {% endfor %}
+</div>
+{% endblock %}

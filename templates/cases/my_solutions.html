@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="page-header">
+    <h1 class="page-title">Мои решения</h1>
+</div>
+
+<div class="section-block">
+    {% if solutions %}
+    <table class="solutions-table">
+        <thead>
+            <tr>
+                <th>Кейс</th>
+                <th>Команда</th>
+                <th>Дата загрузки</th>
+                <th>Статус</th>
+                <th>Оценка</th>
+                <th>Действия</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in solutions %}
+            <tr>
+                <td>
+                    <a href="{% url 'case_detail' item.case.id %}" style="color: #e74c3c; text-decoration: none; font-weight: 600;">
+                        {{ item.case.title }}
+                    </a>
+                </td>
+                <td>{{ item.team.name }}</td>
+                <td>{{ item.submission.uploaded_at|date:"d.m.Y H:i" }}</td>
+                <td>
+                    {% if item.submission.status == 'pending' %}
+                        <span class="status-badge status-pending">
+                            <span>⏳</span>
+                            <span>На проверке</span>
+                        </span>
+                    {% elif item.submission.status == 'reviewed' %}
+                        <span class="status-badge status-reviewed">
+                            <span>✅</span>
+                            <span>Проверено</span>
+                        </span>
+                    {% endif %}
+                </td>
+                <td>
+                    {% if item.review %}
+                        <strong style="color: #1a202c;">
+                            {{ item.review.score_technology|add:item.review.score_economics|add:item.review.score_ecology|add:item.review.score_realizability }}/40
+                        </strong>
+                    {% else %}
+                        <span style="color: #a0aec0;">—</span>
+                    {% endif %}
+                </td>
+                <td style="vertical-align: top;">
+                    <div style="display: flex; flex-direction: column; gap: 8px; min-width: 150px;">
+                        <a href="{{ item.submission.file.url }}" class="btn-sm btn-sm-outline" download style="text-align: center;">
+                            📥 Скачать
+                        </a>
+                        {% if item.submission.status == 'reviewed' %}
+                            <a href="{% url 'case_detail' item.case.id %}" class="btn-sm btn-sm-outline" style="text-align: center;">
+                                📊 Результаты
+                            </a>
+                        {% endif %}
+                    </div>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <div style="text-align: center; padding: 60px 20px; color: #718096;">
+        <div style="font-size: 48px; margin-bottom: 16px;">📂</div>
+        <h3>Пока нет загруженных решений</h3>
+        <p>Перейдите в раздел «Активные кейсы», чтобы загрузить своё первое решение.</p>
+        <a href="{% url 'case_list' %}" class="btn" style="margin-top: 16px;">Перейти к кейсам</a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Вход — ИОС Сахалинэнерго</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <style>
+        .login-wrapper { display: flex; align-items: center; justify-content: center; min-height: 100vh; background: #f4f6f9; }
+        .login-box { background: white; border-radius: 16px; padding: 48px; width: 100%; max-width: 420px; box-shadow: 0 4px 24px rgba(0,0,0,0.08); }
+        .login-box h1 { text-align: center; margin-bottom: 32px; color: #1a202c; font-size: 24px; }
+        .form-field { margin-bottom: 20px; }
+        .form-field label { display: block; margin-bottom: 6px; font-weight: 500; color: #4a5568; font-size: 14px; }
+        .form-field input { width: 100%; padding: 12px 16px; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 15px; }
+        .form-field input:focus { outline: none; border-color: #e74c3c; }
+        .btn-login { width: 100%; padding: 14px; background: #e74c3c; color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: 600; cursor: pointer; }
+        .btn-login:hover { background: #c0392b; }
+        .error-message { background: #fed7d7; color: #c53030; padding: 12px; border-radius: 8px; margin-bottom: 20px; font-size: 14px; text-align: center; }
+    </style>
+</head>
+<body>
+    <div class="login-wrapper">
+        <div class="login-box">
+            <h1>Вход в систему</h1>
+            {% if form.errors %}
+            <div class="error-message">Неверный логин или пароль.</div>
+            {% endif %}
+            <form method="post">
+                {% csrf_token %}
+                <div class="form-field">
+                    <label>Логин</label>
+                    <input type="text" name="username" required>
+                </div>
+                <div class="form-field">
+                    <label>Пароль</label>
+                    <input type="password" name="password" required>
+                </div>
+                <button type="submit" class="btn-login">Войти</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

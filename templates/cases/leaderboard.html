@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="page-header">
+    <h1 class="page-title">🏆 Рейтинг команд</h1>
+</div>
+
+<div class="leaderboard-container">
+    {% if teams_rating %}
+    <!-- Топ-3 с медалями -->
+    <div class="top-three">
+        {% for item in teams_rating|slice:":3" %}
+        <div class="top-card {% if forloop.counter == 1 %}gold{% elif forloop.counter == 2 %}silver{% elif forloop.counter == 3 %}bronze{% endif %}">
+            <div class="medal">
+                {% if forloop.counter == 1 %}🥇
+                {% elif forloop.counter == 2 %}🥈
+                {% elif forloop.counter == 3 %}🥉
+                {% endif %}
+            </div>
+            <div class="top-info">
+                <h3 class="top-team-name">{{ item.team.name }}</h3>
+                <div class="top-score">{{ item.avg_score }} баллов</div>
+                <div class="top-meta">{{ item.cases_count }} кейсов · {{ item.members_count }} участников</div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Полная таблица -->
+    <div class="full-table">
+        <table class="leaderboard-table">
+            <thead>
+                <tr>
+                    <th>Место</th>
+                    <th>Команда</th>
+                    <th>Средний балл</th>
+                    <th>Всего баллов</th>
+                    <th>Кейсов</th>
+                    <th>Участников</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in teams_rating %}
+                <tr {% if forloop.counter <= 3 %}class="top-row"{% endif %}>
+                    <td class="place-cell">
+                        {% if forloop.counter == 1 %}🥇
+                        {% elif forloop.counter == 2 %}🥈
+                        {% elif forloop.counter == 3 %}🥉
+                        {% else %}{{ forloop.counter }}
+                        {% endif %}
+                    </td>
+                    <td class="team-cell">{{ item.team.name }}</td>
+                    <td class="score-cell"><strong>{{ item.avg_score }}</strong></td>
+                    <td>{{ item.total_score }}</td>
+                    <td>{{ item.cases_count }}</td>
+                    <td>{{ item.members_count }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="empty-state">
+        <div class="empty-icon">🏆</div>
+        <h3>Пока нет команд в рейтинге</h3>
+        <p>Как только жюри проверит первые решения, здесь появится таблица лидеров.</p>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="profile-container">
+    <!-- Шапка профиля -->
+    <div class="profile-header-card">
+        <div class="profile-avatar-box">
+            {% if profile_obj.avatar %}
+                <img src="{{ profile_obj.avatar.url }}" alt="Аватар" class="profile-avatar">
+            {% else %}
+                <div class="profile-avatar-placeholder">
+                    <span>{{ user.username|first|upper }}</span>
+                </div>
+            {% endif %}
+        </div>
+        <div class="profile-info-box">
+            <h1 class="profile-name">{% if profile_obj.first_name %}{{ profile_obj.first_name }} {{ profile_obj.last_name }}{% else %}{{ user.username }}{% endif %}</h1>
+            <p class="profile-role">{{ profile_obj.get_role_display }}</p>
+            {% if team %}
+                <p class="profile-team">👥 Команда: {{ team.name }}</p>
+            {% endif %}
+            <a href="{% url 'edit_profile' %}" class="btn-edit">✏️ Редактировать</a>
+        </div>
+    </div>
+
+    <!-- Статистика -->
+    <div class="profile-stats">
+        <div class="stat-box">
+            <div class="stat-num">{{ submissions_count }}</div>
+            <div class="stat-label">Решений</div>
+        </div>
+        <div class="stat-box">
+            <div class="stat-num">{{ reviewed_count }}</div>
+            <div class="stat-label">Проверено</div>
+        </div>
+        <div class="stat-box">
+            <div class="stat-num">{{ avg_score|default:"0" }}</div>
+            <div class="stat-label">Средний балл</div>
+        </div>
+    </div>
+
+    <!-- Информация -->
+    <div class="profile-details-card">
+        <h3 class="details-title">👤 Информация</h3>
+        <div class="details-grid">
+            <div class="detail-item"><span class="detail-label">Логин:</span> <span class="detail-value">{{ user.username }}</span></div>
+            <div class="detail-item"><span class="detail-label">Email:</span> <span class="detail-value">{{ user.email|default:"Не указан" }}</span></div>
+            {% if profile_obj.phone %}
+            <div class="detail-item"><span class="detail-label">Телефон:</span> <span class="detail-value">{{ profile_obj.phone }}</span></div>
+            {% endif %}
+            {% if profile_obj.city %}
+            <div class="detail-item"><span class="detail-label">Город:</span> <span class="detail-value">{{ profile_obj.city }}</span></div>
+            {% endif %}
+            {% if profile_obj.bio %}
+            <div class="detail-item full-width"><span class="detail-label">О себе:</span> <span class="detail-value">{{ profile_obj.bio }}</span></div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
