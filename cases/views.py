@@ -134,6 +134,24 @@ def judge_review(request, submission_id):
 
 
 @login_required
+def judge_submissions(request):
+    """Страница жюри со списком работ на проверку."""
+    profile = request.user.profile
+
+    if profile.role != 'judge':
+        return HttpResponseForbidden("Доступ разрешен только жюри.")
+
+    # Все решения со статусом "на проверке"
+    pending = Submission.objects.filter(status='pending').select_related('case', 'team')
+    # Все проверенные решения
+    reviewed = Submission.objects.filter(status='reviewed').select_related('case', 'team')
+
+    return render(request, 'cases/judge_submissions.html', {
+        'pending': pending,
+        'reviewed': reviewed,
+    })
+
+@login_required
 def profile(request):
     profile_obj = request.user.profile
     team = Team.objects.filter(captain=request.user).first() or Team.objects.filter(members=request.user).first()

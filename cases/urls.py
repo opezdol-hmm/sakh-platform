@@ -36,4 +36,6 @@ urlpatterns = [
     path('login/', auth_views.LoginView.as_view(template_name='cases/login.html'), name='login'),
     path('logout/', auth_views.LogoutView.as_view(next_page='login'), name='logout'),
     path('api/dashboard-analytics/', views.dashboard_analytics, name='dashboard_analytics'),
+    path('review/<int:submission_id>/', views.judge_review, name='judge_review'),
+path('judge/submissions/', views.judge_submissions, name='judge_submissions'),
 ]

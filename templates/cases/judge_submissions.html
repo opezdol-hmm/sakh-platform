@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="judge-page" style="max-width: 900px; margin: 0 auto; padding: 20px;">
+    <h1 style="margin-bottom: 24px;">📋 Работы на проверку</h1>
+
+    <!-- На проверке -->
+    <div style="margin-bottom: 40px;">
+        <h2 style="color: #e74c3c; margin-bottom: 16px;">⏳ Ожидают проверки ({{ pending|length }})</h2>
+        {% if pending %}
+            <div style="display: flex; flex-direction: column; gap: 12px;">
+            {% for sub in pending %}
+                <div style="background: white; padding: 20px; border-radius: 12px; border-left: 4px solid #e74c3c; box-shadow: 0 2px 8px rgba(0,0,0,0.08);">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                            <strong style="font-size: 18px;">{{ sub.case.title }}</strong>
+                            <div style="color: #718096; margin-top: 4px;">
+                                Команда: <strong>{{ sub.team.name }}</strong>
+                            </div>
+                            <div style="color: #718096; font-size: 14px;">
+                                Загружено: {{ sub.submitted_at|date:"d.m.Y H:i" }}
+                            </div>
+                        </div>
+                        <a href="{% url 'judge_review' sub.id %}" style="background: #e74c3c; color: white; padding: 10px 20px; border-radius: 8px; text-decoration: none; font-weight: 600;">
+                            Проверить →
+                        </a>
+                    </div>
+                </div>
+            {% endfor %}
+            </div>
+        {% else %}
+            <p style="color: #718096;">Нет работ на проверку 🎉</p>
+        {% endif %}
+    </div>
+
+    <!-- Проверенные -->
+    <div>
+        <h2 style="color: #27ae60; margin-bottom: 16px;">✅ Проверенные ({{ reviewed|length }})</h2>
+        {% if reviewed %}
+            <div style="display: flex; flex-direction: column; gap: 12px;">
+            {% for sub in reviewed %}
+                <div style="background: white; padding: 20px; border-radius: 12px; border-left: 4px solid #27ae60; box-shadow: 0 2px 8px rgba(0,0,0,0.08);">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                            <strong style="font-size: 18px;">{{ sub.case.title }}</strong>
+                            <div style="color: #718096; margin-top: 4px;">
+                                Команда: <strong>{{ sub.team.name }}</strong>
+                            </div>
+                        </div>
+                        <a href="{% url 'judge_review' sub.id %}" style="background: #27ae60; color: white; padding: 10px 20px; border-radius: 8px; text-decoration: none; font-weight: 600;">
+                            Изменить оценку →
+                        </a>
+                    </div>
+                </div>
+            {% endfor %}
+            </div>
+        {% else %}
+            <p style="color: #718096;">Пока нет проверенных работ.</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

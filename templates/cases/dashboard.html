@@ -2,17 +2,69 @@
 
 {% block content %}
 <div class="page-header">
-    <h1 class="page-title">Личный кабинет участника</h1>
+    <h1 class="page-title">
+        {% if user.profile.role == 'judge' %}
+            Личный кабинет жюри
+        {% elif user.profile.role == 'captain' %}
+            Личный кабинет капитана
+        {% else %}
+            Личный кабинет участника
+        {% endif %}
+    </h1>
 </div>
 
 <div class="dashboard-cards">
+    <!-- Карточка профиля (для всех) -->
     <a href="{% url 'profile' %}" class="dash-card dash-card--profile">
         <div class="dash-card__title">МОЙ<br>ПРОФИЛЬ</div>
         <div class="dash-card__arrow">≫</div>
     </a>
 
+    <!-- Карточка достижений (для всех) -->
     <a href="{% url 'achievements' %}" class="dash-card dash-card--achievements">
         <div class="dash-card__title">МОИ<br>ДОСТИЖЕНИЯ</div>
+        <div class="dash-card__arrow">≫</div>
+    </a>
+
+    <!-- Карточка кейсов (для капитанов и участников) -->
+    {% if user.profile.role != 'judge' %}
+    <a href="{% url 'case_list' %}" class="dash-card dash-card--cases">
+        <div class="dash-card__title">КЕЙСЫ<br>ЧЕМПИОНАТА</div>
+        <div class="dash-card__arrow">≫</div>
+    </a>
+
+    <a href="{% url 'my_solutions' %}" class="dash-card dash-card--solutions">
+        <div class="dash-card__title">МОИ<br>РЕШЕНИЯ</div>
+        <div class="dash-card__arrow">≫</div>
+    </a>
+
+    <a href="{% url 'training' %}" class="dash-card dash-card--training">
+        <div class="dash-card__title">ТРЕНИНГИ<br>И ОБУЧЕНИЕ</div>
+        <div class="dash-card__arrow">≫</div>
+    </a>
+
+    <a href="{% url 'schedule' %}" class="dash-card dash-card--schedule">
+        <div class="dash-card__title">РАСПИСАНИЕ<br>СОБЫТИЙ</div>
+        <div class="dash-card__arrow">≫</div>
+    </a>
+    {% endif %}
+
+    <!-- Карточка работ на проверку (только для жюри) -->
+    {% if user.profile.role == 'judge' %}
+    <a href="{% url 'judge_submissions' %}" class="dash-card dash-card--judge" style="background: linear-gradient(135deg, #e74c3c, #c0392b); color: white;">
+        <div class="dash-card__title">РАБОТЫ<br>НА ПРОВЕРКУ</div>
+        <div class="dash-card__arrow">≫</div>
+    </a>
+
+    <a href="{% url 'case_list' %}" class="dash-card dash-card--cases">
+        <div class="dash-card__title">ВСЕ<br>КЕЙСЫ</div>
+        <div class="dash-card__arrow">≫</div>
+    </a>
+    {% endif %}
+
+    <!-- Уведомления (для всех) -->
+    <a href="{% url 'notifications' %}" class="dash-card dash-card--notifications">
+        <div class="dash-card__title">УВЕДОМЛЕНИЯ</div>
         <div class="dash-card__arrow">≫</div>
     </a>
 </div>
